@@ -6,7 +6,7 @@
 
 ## What This Is
 
-A structured framework for replacing or augmenting every business function with AI agents. Each agent has a narrow scope, a defined identity, a specific skill set, access to only the tools it needs, and clear handoff protocols to other agents.
+A structured framework for replacing or augmenting every business function with AI agents. Agents aren't just digital employees — they're specialized workers, cluster teams, and orchestrators that together run an entire business function.
 
 When you deploy a department, you inject:
 1. The **department template** (who these agents are and how they work)
@@ -17,21 +17,59 @@ The result: a fully operational AI department that runs autonomously, escalates 
 
 ---
 
+## The Layered Model
+
+> **Not "who is this agent?" — but "what problem does this agent solve?"**
+
+Agents inside departments come in three types:
+
+### 1. Solo Agents
+Narrow scope. One job. Fully autonomous within their lane.
+- SEO Specialist, DevOps, Bookkeeper, Email Marketer
+- They receive tasks, execute, report back
+- Think: specialist contractor
+
+### 2. Cluster Agents
+Multiple agents working together on one function. The cluster IS the workflow.
+- **Content Engine** → Researcher + Writer + Editor + Publisher
+- **Revenue Engine** → Prospector + Qualifier + Closer + Follow-up
+- **Build Engine** → Architect + Developer + QA + DevOps
+- Think: a small team assigned to one outcome
+
+### 3. Orchestrator Agents
+Department managers. Route work to the right solo or cluster. Synthesize outputs. Escalate to humans.
+- CMO, CTO, CFO, COO equivalents
+- They don't do the work — they direct it
+- Think: department head
+
+```
+Human
+  └── Orchestrator Agent (Department Head)
+        ├── Solo Agent (narrow task)
+        ├── Solo Agent (narrow task)
+        └── Cluster (multi-agent workflow)
+              ├── Agent A
+              ├── Agent B
+              └── Agent C
+```
+
+---
+
 ## Architecture
 
 ```
 agent-os/
 ├── COMPANY.md              ← Company context template (injected at onboarding)
-├── ORCHESTRATOR.md         ← Zeus/ARES — master orchestrator spec
+├── ORCHESTRATOR.md         ← Master orchestrator spec (Zeus/ARES)
 ├── DEPARTMENT_TEMPLATE.md  ← How every department is structured
 ├── AGENT_TEMPLATE.md       ← How every agent role is structured
 │
 ├── departments/
 │   ├── 01-executive/
 │   ├── 02-finance/
-│   ├── 03-marketing/       ← BUILT (Nathan's domain)
+│   ├── 03-marketing/       ← IN PROGRESS (Nathan's domain)
 │   ├── 04-sales/
-│   ├── 05-engineering/     ← BUILT (Travis + Britton's domain)
+│   ├── 05-engineering/     ← IN PROGRESS (Travis + Britton's domain)
 │   ├── 06-operations/
 │   ├── 07-customer-success/
 │   ├── 08-hr-people/
@@ -49,64 +87,67 @@ agent-os/
 
 ## The 12 Departments
 
-| # | Department | Manager Agent | Key Workers | Task Type |
-|---|---|---|---|---|
-| 1 | **Executive** | CEO Agent | COO, Strategy | Decisions, vision, board reporting |
-| 2 | **Finance** | CFO Agent | Accountant, AP/AR, Analyst | Numbers, compliance, payroll |
-| 3 | **Marketing** | CMO Agent | Brand, Content, SEO, Paid, Email | Campaigns, content, growth |
-| 4 | **Sales** | VP Sales Agent | SDR, AE, Sales Ops | Pipeline, outreach, closing |
-| 5 | **Engineering** | CTO Agent | Architect, Devs, QA, DevOps | Code, infra, deployment |
-| 6 | **Operations** | COO Agent | Project Mgr, Process, Vendor | Execution, logistics, ops |
-| 7 | **Customer Success** | CS Manager | Support, Onboarding, Account | Retention, tickets, NPS |
-| 8 | **HR/People** | People Lead | Recruiter, Onboarding, Culture | Hiring, culture, payroll |
-| 9 | **Legal/Compliance** | General Counsel | Contracts, IP, Privacy | Risk, compliance, legal |
-| 10 | **Research/Intel** | Research Lead | Analyst, Competitive Intel | Market data, insights |
-| 11 | **Content/Media** | Content Director | Writer, Designer, Video, Pod | Creation, production |
-| 12 | **Product** | Product Manager | UX, Roadmap, User Research | Features, roadmap, UX |
+| # | Department | Orchestrator | Clusters | Solos | Task Flow |
+|---|---|---|---|---|---|
+| 1 | **Executive** | CEO | Strategy Cluster | Board Reporter, Comms | Decisions |
+| 2 | **Finance** | CFO | Reporting Cluster | Bookkeeper, AP/AR, Payroll | Request/Response |
+| 3 | **Marketing** | CMO | Growth Cluster, Content Cluster | SEO, Email, Social | Campaign/Project |
+| 4 | **Sales** | VP Sales | Revenue Cluster | CRM Ops, Follow-up | Continuous Pipeline |
+| 5 | **Engineering** | CTO | Build Cluster | DevOps, Security | Sequential/Gated |
+| 6 | **Operations** | COO | Project Cluster | Vendor, Logistics | Continuous Pipeline |
+| 7 | **Customer Success** | CS Director | Support Cluster | Onboarding, NPS | Continuous Pipeline |
+| 8 | **HR/People** | People Lead | Recruiting Cluster | Culture, Payroll | Request/Response |
+| 9 | **Legal/Compliance** | General Counsel | Contracts Cluster | Privacy, IP | Request/Response |
+| 10 | **Research/Intel** | Research Lead | Intel Cluster | Data Analyst | Intelligence/Async |
+| 11 | **Content/Media** | Content Director | Production Cluster | Video, Podcast | Campaign/Project |
+| 12 | **Product** | Product Manager | UX Cluster | Roadmap, User Research | Campaign/Project |
 
 ---
 
-## How Departments Work
+## Task Flow Types
 
-Each department has a **unique task flow** based on what kind of work it does:
+Each department runs a fundamentally different type of workflow:
 
-### Task Flow Types
+### Type A — Request/Response
+*(Finance, Legal, HR)*
+```
+Human request → Orchestrator → Solo or Cluster → Output → Human review
+```
+Structured, compliance-sensitive. Output validated before leaving department.
 
-**Type A — Request/Response** (Finance, Legal, HR)
+### Type B — Campaign/Project
+*(Marketing, Content, Product)*
 ```
-Human request → Manager Agent → Worker Agent → Output → Human review
+Brief → Orchestrator breaks into workstreams → Clusters run in parallel → Orchestrator assembles → Review
 ```
-Structured, compliance-sensitive. Manager validates before output leaves department.
+Creative, iterative. Clusters can loop back. Orchestrator synthesizes.
 
-**Type B — Campaign/Project** (Marketing, Content, Product)
+### Type C — Continuous Pipeline
+*(Sales, Customer Success, Operations)*
 ```
-Brief → Manager breaks into tasks → Workers execute in parallel → Manager assembles → Review
+Trigger → Cluster executes → Logs to system → Escalates if needed → Loop
 ```
-Creative, iterative. Workers can loop back. Manager synthesizes.
+Always running. Event-driven. Output feeds into CRM/systems.
 
-**Type C — Continuous/Pipeline** (Sales, Customer Success, Operations)
+### Type D — Sequential/Gated
+*(Engineering)*
 ```
-Trigger → Worker executes → Logs to CRM/system → Escalates if needed → Loop
+Spec → Architect → Build Cluster → QA gate → DevOps ships → Monitor
 ```
-Always running. Triggered by events (new lead, new ticket, new order).
+Each stage must pass before next begins. No skipping gates.
 
-**Type D — Build/Deploy** (Engineering)
+### Type E — Intelligence/Async
+*(Research, Competitive Intel)*
 ```
-Spec → Architect designs → Devs build → QA tests → DevOps ships → Monitor
+Question → Intel Cluster pulls data → Analyst synthesizes → Report → Distribution to other depts
 ```
-Sequential with gates. Each stage must pass before next begins.
-
-**Type E — Intelligence/Research** (Research, Competitive Intel)
-```
-Question → Research Agent pulls data → Analyst synthesizes → Report → Distribution
-```
-Async. Output feeds other departments.
+Async. Output feeds other departments. Runs on schedule or on-demand.
 
 ---
 
 ## Agent File Structure
 
-Every agent in every department has these files:
+Every agent (solo or within a cluster) has these files:
 
 ```
 departments/[DEPT]/[ROLE]/
@@ -127,29 +168,41 @@ departments/[DEPT]/[ROLE]/
 2. Fill in `COMPANY.md` with client context
 3. Set credentials in `KEYS.md` for each agent
 4. Inject `COMPANY.md` into each agent's context
-5. Run the department manager agent
+5. Run the orchestrator agent
 6. Department is operational
 
 ---
 
-## The Orchestrator Layer
+## The Master Orchestrator
 
-Above all departments sits the **Orchestrator** (Zeus/ARES):
+Above all departments sits the **Master Orchestrator** (Zeus/ARES):
 - Routes tasks to the right department
-- Handles cross-department coordination
-- Escalates to human when needed
+- Handles cross-department coordination  
+- Runs the RSI learning loop (learns from corrections)
 - Monitors department health
-- Runs the RSI learning loop
+- Escalates to human when needed
+
+---
+
+## What Makes This Different
+
+| Everyone else | Deconstraint Agent OS |
+|---|---|
+| Task-based agents (do one thing) | Department OS (run a whole function) |
+| Requires engineering to deploy | Templatized — fill and deploy |
+| No learning layer | RSI built in — agents improve over time |
+| Org chart = human org chart | Layered model — solos, clusters, orchestrators |
+| One agent = one tool | Agents get exactly the tools they need |
 
 ---
 
 ## Status
 
-| Department | Status |
-|---|---|
-| Engineering | 🔄 In Progress |
-| Marketing | 🔄 In Progress |
-| All others | 📋 Planned |
+| Department | Orchestrator | Clusters | Solos | Status |
+|---|---|---|---|---|
+| Engineering | CTO ✅ | Build Cluster 🔄 | DevOps 📋 | In Progress |
+| Marketing | CMO ✅ | Growth/Content Cluster 🔄 | SEO/Email 📋 | In Progress |
+| All others | 📋 | 📋 | 📋 | Planned |
 
 ---
 
